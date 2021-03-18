@@ -26,7 +26,7 @@ jobs:
       - name: Prefetch tarballs
         # Tarballs are prefetched outside of the container since CentOS 5 has very old tools
         run: |
-	  docker/build_scripts/prefetch.sh perl openssl curl
+          docker/build_scripts/prefetch.sh perl openssl curl
 
       # Setup tags to be used for docker images
       - uses: crazy-max/ghaction-docker-meta@v1
