@@ -45,9 +45,9 @@ jobs:
 
       - uses: docker/build-push-action@v2
         with:
-	  push: False
-	  context: ./docker
-	  file: ./docker/Dockerfile
-	  platforms: linux/ppc64le
+          push: False
+          context: ./docker
+          file: ./docker/Dockerfile
+          platforms: linux/ppc64le
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
