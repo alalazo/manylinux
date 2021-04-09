@@ -52,7 +52,7 @@ popd
 rm -rf Python-${CPYTHON_VERSION} Python-${CPYTHON_VERSION}.tgz Python-${CPYTHON_VERSION}.tgz.asc
 
 # we don't need libpython*.a, and they're many megabytes
-find ${PREFIX} -name '*.a' -print0 | xargs -0 rm -f
+# find ${PREFIX} -name '*.a' -print0 | xargs -0 rm -f
 
 # We do not need the Python test suites
 find ${PREFIX} -depth \( -type d -a -name test -o -name tests \) | xargs rm -rf

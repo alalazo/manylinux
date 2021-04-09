@@ -16,60 +16,38 @@ on:
 
 jobs:
   build_manylinux:
-    name: ${{ matrix.policy }}_${{ matrix.platform }}
+    name: manylinux2014
     runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - policy: "manylinux2010"
-            platform: "i686"
-          - policy: "manylinux2010"
-            platform: "x86_64"
-          - policy: "manylinux2014"
-            platform: "i686"
-          - policy: "manylinux2014"
-            platform: "x86_64"
-          - policy: "manylinux2014"
-            platform: "ppc64le"
-          - policy: "manylinux_2_24"
-            platform: "i686"
-          - policy: "manylinux_2_24"
-            platform: "x86_64"
-          - policy: "manylinux_2_24"
-            platform: "ppc64le"
 
     env:
-      POLICY: ${{ matrix.policy }}
+      POLICY: "manylinux2014"
       PLATFORM: ${{ matrix.platform }}
       COMMIT_SHA: ${{ github.sha }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Set up QEMU
-        if: matrix.platform == 'ppc64le'
-        uses: docker/setup-qemu-action@v1.0.1
+      # Setup tags to be used for docker images
+      - uses: crazy-max/ghaction-docker-meta@v1
+        id: docker_meta
         with:
-          platforms: ppc64le
+          images: ghcr.io/${{ github.repository_owner }}/manylinux2014
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Setup cache
-        uses: actions/cache@v2
+      # Login to Github Packages
+      - uses: docker/login-action@v1
         with:
-          path: .buildx-cache-${{ matrix.policy }}_${{ matrix.platform }}/*
-          key: buildx-cache-${{ matrix.policy }}-${{ matrix.platform }}-${{ hashFiles('docker/**') }}
-          restore-keys: buildx-cache-${{ matrix.policy }}-${{ matrix.platform }}-
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_PAT }}
+  
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
 
-      - name: Build
-        run: ./build.sh
-
-      - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'pypa/manylinux'
-        run: ./deploy.sh
-        env:
-          QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
-          QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
+      - uses: docker/build-push-action@v2
+        with:
+	  push: False
+	  context: ./docker
+	  file: ./docker/Dockerfile
+	  platforms: linux/ppc64le
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
