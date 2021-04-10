@@ -51,6 +51,6 @@ jobs:
           push: True
           context: ./docker
           file: ./docker/Dockerfile
-          platforms: ${{ steps.qemu.outputs.platforms }}
+          platforms: linux/ppc64le,linux/arm64
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
