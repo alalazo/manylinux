@@ -42,8 +42,8 @@ jobs:
       - uses: docker/setup-qemu-action@v1
         id: qemu
         with:
-	  platforms: linux/ppc64le,linux/arm64
-	  
+          platforms: linux/ppc64le,linux/arm64
+  
       - uses: docker/setup-buildx-action@v1
 
       - uses: docker/build-push-action@v2
