@@ -85,7 +85,7 @@ COPY --from=build_cpython39 /opt/_internal /opt/_internal/
 RUN hardlink -cv /opt/_internal
 
 
-FROM runtime_base
+FROM ghcr.io/alalazo/manylinux2014-base:master
 COPY --from=build_git /manylinux-rootfs /
 COPY --from=build_cmake /manylinux-rootfs /
 COPY --from=build_swig /manylinux-rootfs /
