@@ -22,7 +22,7 @@ concurrency:
 jobs:
   build_manylinux:
     name: ${{ matrix.policy[0] }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.policy[6] }}
     strategy:
       fail-fast: false
       matrix:
@@ -32,14 +32,15 @@ jobs:
         # 3. PREPEND_PATH
         # 4. LD_LIBRARY_PATH_ARG
         # 5. Docker platforms
+	# 6. Github Action runner
         policy: [
             ["manylinux2014", "centos:7",
              "/opt/rh/devtoolset-10/root", "/opt/rh/devtoolset-10/root/usr/bin:",
              "/opt/rh/devtoolset-10/root/usr/lib64:/opt/rh/devtoolset-10/root/usr/lib:/opt/rh/devtoolset-10/root/usr/lib64/dyninst:/opt/rh/devtoolset-10/root/usr/lib/dyninst:/usr/local/lib64",
-             "linux/amd64,linux/arm64,linux/ppc64le"
+             "linux/amd64,linux/arm64,linux/ppc64le", self-hosted
             ],
-            ["manylinux_2_24", "debian:9", "", "", "", 'linux/amd64,linux/arm64'],
-            ["musllinux_1_1", "alpine:3.12", "", "", "", 'linux/amd64']
+            ["manylinux_2_24", "debian:9", "", "", "", 'linux/amd64,linux/arm64', ubuntu-latest],
+            ["musllinux_1_1", "alpine:3.12", "", "", "", 'linux/amd64', ubuntu-latest]
         ]
 
     env:
