@@ -32,7 +32,7 @@ jobs:
         # 3. PREPEND_PATH
         # 4. LD_LIBRARY_PATH_ARG
         # 5. Docker platforms
-	# 6. Github Action runner
+        # 6. Github Action runner
         policy: [
             ["manylinux2014", "centos:7",
              "/opt/rh/devtoolset-10/root", "/opt/rh/devtoolset-10/root/usr/bin:",
